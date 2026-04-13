@@ -3,32 +3,77 @@
 {% block title %}Sign In{% endblock %}
 
 {% block body %}
-    <section class="auth-card">
-        <div>
-            <p class="eyebrow">SaaS workspace</p>
-            <h1>Sign in to manage clients and invoices</h1>
-            <p class="muted">Track clients, invoice status, and revenue from one Symfony workspace.</p>
+    <section class="auth-hero">
+        <div class="auth-hero__copy">
+            <p class="eyebrow">InvoiceFlow workspace</p>
+            <h1>Run clients, billing, and cash visibility from one desk.</h1>
+            <p class="muted auth-hero__lede">
+                Manage active accounts, follow unpaid invoices, and keep revenue
+                movement visible in one focused Symfony SaaS workspace.
+            </p>
+
+            <div class="auth-metrics">
+                <article class="auth-metric">
+                    <span>Clients</span>
+                    <strong>6 seeded accounts</strong>
+                </article>
+                <article class="auth-metric">
+                    <span>Invoices</span>
+                    <strong>24 seeded invoices</strong>
+                </article>
+                <article class="auth-metric">
+                    <span>Preview</span>
+                    <strong>Ready for live demo use</strong>
+                </article>
+            </div>
         </div>
 
-        <form method="post" class="form-card">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <div class="auth-card auth-card--stacked">
+            <div>
+                <p class="eyebrow">Sign in</p>
+                <h2>Access your billing workspace</h2>
+                <p class="muted">Use your account or the seeded demo users below.</p>
+            </div>
 
-            <label class="field">
-                <span>Email</span>
-                <input type="email" name="email" value="{{ last_username }}" required autofocus>
-            </label>
+            <form method="post" class="form-card auth-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <label class="field">
-                <span>Password</span>
-                <input type="password" name="password" required>
-            </label>
+                <label class="field">
+                    <span>Email</span>
+                    <input type="email" name="email" value="{{ last_username }}" required autofocus autocomplete="email">
+                </label>
 
-            {% if error %}
-                <div class="flash flash--error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+                <label class="field">
+                    <span>Password</span>
+                    <input type="password" name="password" required autocomplete="current-password">
+                </label>
 
-            <button class="button" type="submit">Sign in</button>
-            <p class="muted">No account yet? <a href="{{ path('app_register') }}">Create one</a></p>
-        </form>
+                {% if error %}
+                    <div class="flash flash--error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <button class="button auth-submit" type="submit">Open workspace</button>
+            </form>
+
+            <div class="auth-demo">
+                <div>
+                    <p class="eyebrow">Demo access</p>
+                    <p class="muted">Use one of the seeded accounts for a quick walkthrough.</p>
+                </div>
+
+                <div class="auth-demo__list">
+                    <div class="auth-demo__item">
+                        <strong>owner@example.com</strong>
+                        <span>Password123</span>
+                    </div>
+                    <div class="auth-demo__item">
+                        <strong>finance@example.com</strong>
+                        <span>Password123</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="muted auth-footnote">No account yet? <a href="{{ path('app_register') }}">Create one</a></p>
+        </div>
     </section>
 {% endblock %}
