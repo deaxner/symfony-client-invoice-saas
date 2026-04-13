@@ -6,6 +6,7 @@ use App\DTO\InvoiceData;
 use App\Entity\Invoice;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,11 +25,11 @@ class InvoiceType extends AbstractType
                 'scale' => 2,
                 'html5' => true,
             ])
-            ->add('issuedAt', null, [
+            ->add('issuedAt', DateType::class, [
                 'widget' => 'single_text',
                 'input' => 'string',
             ])
-            ->add('dueAt', null, [
+            ->add('dueAt', DateType::class, [
                 'widget' => 'single_text',
                 'input' => 'string',
             ])

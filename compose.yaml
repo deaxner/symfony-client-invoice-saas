@@ -13,12 +13,16 @@ services:
       APP_DEBUG: 1
       APP_SECRET: ${APP_SECRET:-6f1d1d26c2a44e8abcf30d14d5f30fc2}
       DATABASE_URL: mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD:-ChangeMe123!}@database:3306/${MYSQL_DATABASE:-client_invoice_saas}?serverVersion=8.0.32&charset=utf8mb4
+      AUTO_MIGRATE: ${AUTO_MIGRATE:-1}
+      AUTO_SEED_DEMO: ${AUTO_SEED_DEMO:-1}
     ports:
       - "${APP_PORT:-8085}:80"
     volumes:
       - ./:/var/www/html
       - symfony_vendor:/var/www/html/vendor
       - symfony_var:/var/www/html/var
+    networks:
+      - portfolio_suite_network
 
   database:
     image: mysql:8.0
@@ -35,8 +39,15 @@ services:
       start_period: 30s
     volumes:
       - database_data:/var/lib/mysql
+    networks:
+      - portfolio_suite_network
 
 volumes:
   symfony_vendor:
   symfony_var:
   database_data:
+
+networks:
+  portfolio_suite_network:
+    external: true
+    name: portfolio_suite_network

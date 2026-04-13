@@ -150,6 +150,19 @@ Apply migrations inside the app container:
 docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
+Seed demo data inside the app container:
+
+```bash
+docker compose exec app php bin/console app:seed-demo-data
+```
+
+Demo credentials:
+
+- `owner@example.com / Password123`
+- `finance@example.com / Password123`
+
+The demo seed creates 2 users, 6 clients, and 24 invoices and is safe to rerun.
+
 ## API Notes
 
 - API endpoints live under `/api`
