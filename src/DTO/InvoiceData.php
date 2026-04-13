@@ -11,6 +11,9 @@ class InvoiceData
     #[Assert\Positive]
     public ?int $clientId = null;
 
+    #[Assert\Positive]
+    public ?int $projectId = null;
+
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/^\d+(\.\d{1,2})?$/', message: 'Amount must be a valid decimal value.')]
     public ?string $amount = null;

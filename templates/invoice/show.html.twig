@@ -25,6 +25,7 @@
             <div><span>Issued</span><strong>{{ invoice.issuedAt|date('Y-m-d') }}</strong></div>
             <div><span>Due</span><strong>{{ invoice.dueAt|date('Y-m-d') }}</strong></div>
             <div><span>Client</span><strong>{{ invoice.client.company }} - {{ invoice.client.name }}</strong></div>
+            <div><span>Project</span><strong>{{ invoice.project ? invoice.project.name ~ ' (' ~ invoice.project.code ~ ')' : 'No linked project' }}</strong></div>
             <div><span>Description</span><strong>{{ invoice.description ?: 'No description provided.' }}</strong></div>
         </article>
     </section>

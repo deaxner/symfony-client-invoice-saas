@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Projects</p>
+            <h1>{{ pageTitle }}</h1>
+        </div>
+    </section>
+
+    <section class="panel form-panel">
+        {{ form_start(form) }}
+            <div class="form-grid">
+                {{ form_row(form.clientId) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.code) }}
+                {{ form_row(form.billingModel) }}
+                {{ form_row(form.hourlyRate) }}
+                {{ form_row(form.internalCostRateDefault) }}
+                {{ form_row(form.slaMonthlyFee) }}
+                {{ form_row(form.monthlyHoursIncluded) }}
+                {{ form_row(form.fixedMonthlyRetainer) }}
+                {{ form_row(form.activeFrom) }}
+                {{ form_row(form.activeUntil) }}
+                {{ form_row(form.isActive) }}
+            </div>
+            {{ form_row(form.description) }}
+            <button class="button" type="submit">{{ submitLabel }}</button>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

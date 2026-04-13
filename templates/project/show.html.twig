@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Project</p>
+            <h1>{{ project.name }}</h1>
+            <p class="muted">{{ project.client.company }} · {{ project.code }}</p>
+        </div>
+        <div class="page-actions">
+            <a class="button button--secondary" href="{{ path('app_project_edit', {id: project.id}) }}">Edit</a>
+            <form method="post" action="{{ path('app_project_delete', {id: project.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_project_' ~ project.id) }}">
+                <button class="button button--danger" type="submit">Delete</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="grid grid--2">
+        <article class="panel">
+            <div class="detail-list">
+                <div><span>Billing model</span><strong>{{ project.billingModel|replace({'_': ' '})|title }}</strong></div>
+                <div><span>Hourly rate</span><strong>{{ project.hourlyRate ? 'EUR ' ~ project.hourlyRate : 'Not set' }}</strong></div>
+                <div><span>Internal cost</span><strong>{{ project.internalCostRateDefault ? 'EUR ' ~ project.internalCostRateDefault : 'Not set' }}</strong></div>
+                <div><span>SLA monthly fee</span><strong>{{ project.slaMonthlyFee ? 'EUR ' ~ project.slaMonthlyFee : 'Not set' }}</strong></div>
+                <div><span>Included hours</span><strong>{{ project.monthlyHoursIncluded ?: 'Not set' }}</strong></div>
+                <div><span>Retainer</span><strong>{{ project.fixedMonthlyRetainer ? 'EUR ' ~ project.fixedMonthlyRetainer : 'Not set' }}</strong></div>
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="detail-list">
+                <div><span>Status</span><strong>{{ project.isActive ? 'Active' : 'Inactive' }}</strong></div>
+                <div><span>Active from</span><strong>{{ project.activeFrom ? project.activeFrom|date('Y-m-d') : 'Not set' }}</strong></div>
+                <div><span>Active until</span><strong>{{ project.activeUntil ? project.activeUntil|date('Y-m-d') : 'Open' }}</strong></div>
+                <div><span>Client</span><strong>{{ project.client.company }} · {{ project.client.name }}</strong></div>
+                <div><span>Description</span><strong>{{ project.description ?: 'No description provided.' }}</strong></div>
+            </div>
+        </article>
+    </section>
+{% endblock %}

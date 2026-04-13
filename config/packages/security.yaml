@@ -23,6 +23,7 @@ security:
 
     access_control:
         - { path: ^/(login|register)$, roles: PUBLIC_ACCESS }
+        - { path: ^/public-api, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
 

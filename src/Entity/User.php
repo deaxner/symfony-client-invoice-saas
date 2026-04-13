@@ -33,6 +33,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Client::class, orphanRemoval: true)]
     private Collection $clients;
 
+    /** @var Collection<int, Project> */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class, orphanRemoval: true)]
+    private Collection $projects;
+
     /** @var Collection<int, Invoice> */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
@@ -40,6 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->clients = new ArrayCollection();
+        $this->projects = new ArrayCollection();
         $this->invoices = new ArrayCollection();
     }
 
@@ -100,6 +105,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getClients(): Collection
     {
         return $this->clients;
+    }
+
+    /** @return Collection<int, Project> */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
     }
 
     /** @return Collection<int, Invoice> */

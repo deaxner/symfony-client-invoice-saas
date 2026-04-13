@@ -21,8 +21,9 @@ class InvoiceRepository extends ServiceEntityRepository
     public function findByOwner(User $owner): array
     {
         return $this->createQueryBuilder('invoice')
-            ->addSelect('client')
+            ->addSelect('client', 'project')
             ->join('invoice.client', 'client')
+            ->leftJoin('invoice.project', 'project')
             ->andWhere('invoice.owner = :owner')
             ->setParameter('owner', $owner)
             ->orderBy('invoice.issuedAt', 'DESC')
@@ -33,8 +34,9 @@ class InvoiceRepository extends ServiceEntityRepository
     public function findOneOwnedByUser(int $id, User $owner): ?Invoice
     {
         return $this->createQueryBuilder('invoice')
-            ->addSelect('client')
+            ->addSelect('client', 'project')
             ->join('invoice.client', 'client')
+            ->leftJoin('invoice.project', 'project')
             ->andWhere('invoice.id = :id')
             ->andWhere('invoice.owner = :owner')
             ->setParameter('id', $id)
@@ -81,13 +83,41 @@ class InvoiceRepository extends ServiceEntityRepository
     public function findRecentForUser(User $owner, int $limit = 5): array
     {
         return $this->createQueryBuilder('invoice')
-            ->addSelect('client')
+            ->addSelect('client', 'project')
             ->join('invoice.client', 'client')
+            ->leftJoin('invoice.project', 'project')
             ->andWhere('invoice.owner = :owner')
             ->setParameter('owner', $owner)
             ->orderBy('invoice.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    /** @return array<int, array{name: string, total: string}> */
+    public function sumRevenueGroupedByProject(User $owner): array
+    {
+        return $this->createQueryBuilder('invoice')
+            ->select('COALESCE(project.name, client.company) AS name, COALESCE(SUM(invoice.amount), 0) AS total')
+            ->join('invoice.client', 'client')
+            ->leftJoin('invoice.project', 'project')
+            ->andWhere('invoice.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->groupBy('name')
+            ->orderBy('total', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function sumUnpaidRevenueForUser(User $owner): string
+    {
+        return (string) ($this->createQueryBuilder('invoice')
+            ->select('COALESCE(SUM(invoice.amount), 0)')
+            ->andWhere('invoice.owner = :owner')
+            ->andWhere('invoice.status = :status')
+            ->setParameter('owner', $owner)
+            ->setParameter('status', Invoice::STATUS_UNPAID)
+            ->getQuery()
+            ->getSingleScalarResult() ?? '0.00');
     }
 }

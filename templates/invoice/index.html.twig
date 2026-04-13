@@ -18,6 +18,7 @@
                     <tr>
                         <th>Number</th>
                         <th>Client</th>
+                        <th>Project</th>
                         <th>Status</th>
                         <th>Amount</th>
                         <th>Due</th>
@@ -29,6 +30,7 @@
                         <tr>
                             <td>{{ invoice.number }}</td>
                             <td>{{ invoice.client.company }}</td>
+                            <td>{{ invoice.project ? invoice.project.name : '—' }}</td>
                             <td><span class="pill pill--{{ invoice.status }}">{{ invoice.status|title }}</span></td>
                             <td>EUR {{ invoice.amount }}</td>
                             <td>{{ invoice.dueAt|date('Y-m-d') }}</td>
@@ -36,7 +38,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="6" class="muted">No invoices created yet.</td>
+                            <td colspan="7" class="muted">No invoices created yet.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

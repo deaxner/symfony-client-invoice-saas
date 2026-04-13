@@ -36,6 +36,7 @@ class InvoiceController extends AbstractController
         $data->status = 'unpaid';
         $form = $this->createForm(InvoiceType::class, $data, [
             'client_choices' => $invoiceService->clientChoicesForUser($user),
+            'project_choices' => $invoiceService->projectChoicesForUser($user),
         ]);
         $form->handleRequest($request);
 
@@ -72,6 +73,7 @@ class InvoiceController extends AbstractController
         $invoice = $invoiceService->getForUser($id, $user);
         $data = new InvoiceData();
         $data->clientId = $invoice->getClient()?->getId();
+        $data->projectId = $invoice->getProject()?->getId();
         $data->amount = $invoice->getAmount();
         $data->issuedAt = $invoice->getIssuedAt()?->format('Y-m-d');
         $data->dueAt = $invoice->getDueAt()?->format('Y-m-d');
@@ -80,6 +82,7 @@ class InvoiceController extends AbstractController
 
         $form = $this->createForm(InvoiceType::class, $data, [
             'client_choices' => $invoiceService->clientChoicesForUser($user),
+            'project_choices' => $invoiceService->projectChoicesForUser($user),
         ]);
         $form->handleRequest($request);
 

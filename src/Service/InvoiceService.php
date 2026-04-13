@@ -7,6 +7,7 @@ use App\Entity\Invoice;
 use App\Entity\User;
 use App\Repository\ClientRepository;
 use App\Repository\InvoiceRepository;
+use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -15,6 +16,7 @@ class InvoiceService
     public function __construct(
         private readonly InvoiceRepository $invoiceRepository,
         private readonly ClientRepository $clientRepository,
+        private readonly ProjectRepository $projectRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
@@ -74,6 +76,17 @@ class InvoiceService
         return $choices;
     }
 
+    /** @return array<string, int> */
+    public function projectChoicesForUser(User $user): array
+    {
+        $choices = [];
+        foreach ($this->projectRepository->findByOwner($user) as $project) {
+            $choices[$project->getName() . ' (' . $project->getCode() . ')'] = (int) $project->getId();
+        }
+
+        return $choices;
+    }
+
     private function hydrate(Invoice $invoice, InvoiceData $data, User $user): void
     {
         $client = $this->clientRepository->findOneOwnedByUser((int) $data->clientId, $user);
@@ -81,9 +94,18 @@ class InvoiceService
             throw new NotFoundHttpException('Client not found for this invoice.');
         }
 
+        $project = null;
+        if (null !== $data->projectId) {
+            $project = $this->projectRepository->findOneOwnedByUser((int) $data->projectId, $user);
+            if (null === $project) {
+                throw new NotFoundHttpException('Project not found for this invoice.');
+            }
+        }
+
         $invoice
             ->setOwner($user)
             ->setClient($client)
+            ->setProject($project)
             ->setAmount(number_format((float) $data->amount, 2, '.', ''))
             ->setIssuedAt(new \DateTimeImmutable((string) $data->issuedAt))
             ->setDueAt(new \DateTimeImmutable((string) $data->dueAt))

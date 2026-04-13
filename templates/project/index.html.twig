@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Projects</p>
+            <h1>Commercial delivery projects</h1>
+            <p class="muted">Attach clients, billing models, and rates to the projects that drive delivery economics.</p>
+        </div>
+        <a class="button" href="{{ path('app_project_new') }}">Add project</a>
+    </section>
+
+    <section class="panel">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Client</th>
+                        <th>Billing</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                        <tr>
+                            <td>
+                                <strong>{{ project.name }}</strong>
+                                <div class="muted">{{ project.code }}</div>
+                            </td>
+                            <td>{{ project.client.company }}</td>
+                            <td>{{ project.billingModel|replace({'_': ' '})|title }}</td>
+                            <td><span class="pill {{ project.isActive ? 'pill--paid' : 'pill--unpaid' }}">{{ project.isActive ? 'Active' : 'Inactive' }}</span></td>
+                            <td><a href="{{ path('app_project_show', {id: project.id}) }}">View</a></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="muted">No projects created yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

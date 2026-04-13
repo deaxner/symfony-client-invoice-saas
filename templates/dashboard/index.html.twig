@@ -11,6 +11,7 @@
         </div>
         <div class="page-actions">
             <a class="button button--secondary" href="{{ path('app_client_new') }}">New client</a>
+            <a class="button button--secondary" href="{{ path('app_project_new') }}">New project</a>
             <a class="button" href="{{ path('app_invoice_new') }}">New invoice</a>
         </div>
     </section>
@@ -25,12 +26,16 @@
             <strong>{{ stats.invoices }}</strong>
         </article>
         <article class="stat-card">
-            <span>Paid</span>
-            <strong>{{ stats.paidInvoices }}</strong>
+            <span>Projects</span>
+            <strong>{{ stats.projects }}</strong>
         </article>
         <article class="stat-card">
             <span>Revenue</span>
             <strong>EUR {{ stats.paidRevenue }}</strong>
+        </article>
+        <article class="stat-card">
+            <span>Unpaid exposure</span>
+            <strong>EUR {{ stats.unpaidExposure }}</strong>
         </article>
     </section>
 
@@ -51,6 +56,40 @@
 
         <article class="panel">
             <div class="panel__header">
+                <h2>Commercial mix</h2>
+            </div>
+            <div class="status-list">
+                {% for item in projectBillingMix %}
+                    <div class="status-row">
+                        <span class="pill">{{ item.billingModel|replace({'_': ' '})|title }}</span>
+                        <strong>{{ item.total }}</strong>
+                    </div>
+                {% else %}
+                    <p class="muted">No projects yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="grid grid--2">
+        <article class="panel">
+            <div class="panel__header">
+                <h2>Revenue by project</h2>
+            </div>
+            <div class="stack-list">
+                {% for item in projectRevenue %}
+                    <div class="list-row">
+                        <strong>{{ item.name }}</strong>
+                        <span>EUR {{ item.total }}</span>
+                    </div>
+                {% else %}
+                    <p class="muted">No invoice revenue yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel__header">
                 <h2>Recent invoices</h2>
             </div>
             <div class="stack-list">
@@ -58,7 +97,7 @@
                     <a class="list-row" href="{{ path('app_invoice_show', {id: invoice.id}) }}">
                         <div>
                             <strong>{{ invoice.number }}</strong>
-                            <p>{{ invoice.client.company }}</p>
+                            <p>{{ invoice.client.company }}{% if invoice.project %} · {{ invoice.project.name }}{% endif %}</p>
                         </div>
                         <div class="text-right">
                             <span class="pill pill--{{ invoice.status }}">{{ invoice.status|title }}</span>

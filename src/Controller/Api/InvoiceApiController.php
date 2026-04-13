@@ -72,6 +72,7 @@ class InvoiceApiController extends AbstractController
         $payload = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $form = $this->createForm(InvoiceType::class, $data, [
             'client_choices' => $invoiceService->clientChoicesForUser($user),
+            'project_choices' => $invoiceService->projectChoicesForUser($user),
             'csrf_protection' => false,
         ]);
         $form->submit($payload);
@@ -101,6 +102,11 @@ class InvoiceApiController extends AbstractController
                 'name' => $invoice->getClient()?->getName(),
                 'company' => $invoice->getClient()?->getCompany(),
             ],
+            'project' => $invoice->getProject() ? [
+                'id' => $invoice->getProject()?->getId(),
+                'name' => $invoice->getProject()?->getName(),
+                'code' => $invoice->getProject()?->getCode(),
+            ] : null,
             'amount' => $invoice->getAmount(),
             'status' => $invoice->getStatus(),
             'issuedAt' => $invoice->getIssuedAt()?->format('Y-m-d'),

@@ -47,9 +47,14 @@ class Client
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
+    /** @var Collection<int, Project> */
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Project::class, orphanRemoval: true)]
+    private Collection $projects;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +148,12 @@ class Client
     public function getInvoices(): Collection
     {
         return $this->invoices;
+    }
+
+    /** @return Collection<int, Project> */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
     }
 
     #[ORM\PrePersist]

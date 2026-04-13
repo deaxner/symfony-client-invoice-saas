@@ -21,6 +21,12 @@ class InvoiceType extends AbstractType
                 'label' => 'Client',
                 'choices' => $options['client_choices'],
             ])
+            ->add('projectId', ChoiceType::class, [
+                'label' => 'Project',
+                'choices' => $options['project_choices'],
+                'required' => false,
+                'placeholder' => 'No linked project',
+            ])
             ->add('amount', NumberType::class, [
                 'scale' => 2,
                 'html5' => true,
@@ -47,6 +53,7 @@ class InvoiceType extends AbstractType
         $resolver->setDefaults([
             'data_class' => InvoiceData::class,
             'client_choices' => [],
+            'project_choices' => [],
         ]);
     }
 }
