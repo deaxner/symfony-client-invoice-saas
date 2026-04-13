@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Invoices</p>
+            <h1>{{ pageTitle }}</h1>
+        </div>
+    </section>
+
+    <section class="panel form-panel">
+        {{ form_start(form) }}
+            {{ form_row(form.clientId) }}
+            {{ form_row(form.amount) }}
+            {{ form_row(form.issuedAt) }}
+            {{ form_row(form.dueAt) }}
+            {{ form_row(form.status) }}
+            {{ form_row(form.description) }}
+            <button class="button" type="submit">{{ submitLabel }}</button>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Overview</p>
+            <h1>Business dashboard</h1>
+            <p class="muted">Monitor your client base, invoice pipeline, and collected revenue.</p>
+        </div>
+        <div class="page-actions">
+            <a class="button button--secondary" href="{{ path('app_client_new') }}">New client</a>
+            <a class="button" href="{{ path('app_invoice_new') }}">New invoice</a>
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Clients</span>
+            <strong>{{ stats.clients }}</strong>
+        </article>
+        <article class="stat-card">
+            <span>Invoices</span>
+            <strong>{{ stats.invoices }}</strong>
+        </article>
+        <article class="stat-card">
+            <span>Paid</span>
+            <strong>{{ stats.paidInvoices }}</strong>
+        </article>
+        <article class="stat-card">
+            <span>Revenue</span>
+            <strong>EUR {{ stats.paidRevenue }}</strong>
+        </article>
+    </section>
+
+    <section class="grid grid--2">
+        <article class="panel">
+            <div class="panel__header">
+                <h2>Invoice status</h2>
+            </div>
+            <div class="status-list">
+                {% for item in invoiceStatuses %}
+                    <div class="status-row">
+                        <span class="pill pill--{{ item.status }}">{{ item.label }}</span>
+                        <strong>{{ item.value }}</strong>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel__header">
+                <h2>Recent invoices</h2>
+            </div>
+            <div class="stack-list">
+                {% for invoice in recentInvoices %}
+                    <a class="list-row" href="{{ path('app_invoice_show', {id: invoice.id}) }}">
+                        <div>
+                            <strong>{{ invoice.number }}</strong>
+                            <p>{{ invoice.client.company }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="pill pill--{{ invoice.status }}">{{ invoice.status|title }}</span>
+                            <p>EUR {{ invoice.amount }}</p>
+                        </div>
+                    </a>
+                {% else %}
+                    <p class="muted">No invoices yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+{% endblock %}

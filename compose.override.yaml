@@ -1,0 +1,9 @@
+
+services:
+  app:
+    environment:
+      XDEBUG_MODE: off
+
+  database:
+    ports:
+      - "${MYSQL_PORT:-3308}:3306"

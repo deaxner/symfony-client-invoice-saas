@@ -1,0 +1,6 @@
+.git
+.phpunit.cache
+.env.local
+var
+vendor
+cookies.txt

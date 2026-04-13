@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ client.company }}{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Client</p>
+            <h1>{{ client.company }}</h1>
+            <p class="muted">{{ client.name }}</p>
+        </div>
+        <div class="page-actions">
+            <a class="button button--secondary" href="{{ path('app_client_edit', {id: client.id}) }}">Edit</a>
+            <form method="post" action="{{ path('app_client_delete', {id: client.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_client_' ~ client.id) }}">
+                <button class="button button--danger" type="submit">Delete</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="grid grid--2">
+        <article class="panel detail-list">
+            <div>
+                <span>Email</span>
+                <strong>{{ client.email }}</strong>
+            </div>
+            <div>
+                <span>Phone</span>
+                <strong>{{ client.phone ?: 'Not set' }}</strong>
+            </div>
+            <div>
+                <span>Address</span>
+                <strong>{{ client.address ?: 'Not set' }}</strong>
+            </div>
+        </article>
+    </section>
+{% endblock %}

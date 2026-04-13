@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Client Invoice SaaS{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    </head>
+    <body>
+        <div class="shell">
+            {% if app.user %}
+                <aside class="sidebar">
+                    <a class="brand" href="{{ path('app_dashboard') }}">InvoiceFlow</a>
+                    <nav class="sidebar__nav">
+                        <a href="{{ path('app_dashboard') }}" class="{{ app.request.attributes.get('_route') == 'app_dashboard' ? 'is-active' : '' }}">Dashboard</a>
+                        <a href="{{ path('app_client_index') }}" class="{{ app.request.attributes.get('_route') starts with 'app_client_' ? 'is-active' : '' }}">Clients</a>
+                        <a href="{{ path('app_invoice_index') }}" class="{{ app.request.attributes.get('_route') starts with 'app_invoice_' ? 'is-active' : '' }}">Invoices</a>
+                    </nav>
+                    <div class="sidebar__footer">
+                        <p>{{ app.user.email }}</p>
+                        <a href="{{ path('app_logout') }}">Log out</a>
+                    </div>
+                </aside>
+            {% endif %}
+
+            <main class="content {{ app.user ? '' : 'content--auth' }}">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="flash flash--{{ label }}">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% block body %}{% endblock %}
+            </main>
+        </div>
+    </body>
+</html>

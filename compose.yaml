@@ -1,0 +1,42 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: symfony-client-invoice-saas-app
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      APP_SECRET: ${APP_SECRET:-6f1d1d26c2a44e8abcf30d14d5f30fc2}
+      DATABASE_URL: mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD:-ChangeMe123!}@database:3306/${MYSQL_DATABASE:-client_invoice_saas}?serverVersion=8.0.32&charset=utf8mb4
+    ports:
+      - "${APP_PORT:-8085}:80"
+    volumes:
+      - ./:/var/www/html
+      - symfony_vendor:/var/www/html/vendor
+      - symfony_var:/var/www/html/var
+
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-client_invoice_saas}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe123!}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root_password}"]
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - database_data:/var/lib/mysql
+
+volumes:
+  symfony_vendor:
+  symfony_var:
+  database_data:

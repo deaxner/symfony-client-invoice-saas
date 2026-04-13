@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block body %}
+    <section class="auth-card">
+        <div>
+            <p class="eyebrow">SaaS workspace</p>
+            <h1>Create your account</h1>
+            <p class="muted">Start with a simple client and invoice management workspace built on Symfony.</p>
+        </div>
+
+        <div class="form-card">
+            {{ form_start(form) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                <button class="button" type="submit">Create account</button>
+            {{ form_end(form) }}
+            <p class="muted">Already registered? <a href="{{ path('app_login') }}">Sign in</a></p>
+        </div>
+    </section>
+{% endblock %}

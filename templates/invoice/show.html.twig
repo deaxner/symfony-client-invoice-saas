@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ invoice.number }}{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Invoice</p>
+            <h1>{{ invoice.number }}</h1>
+            <p class="muted">{{ invoice.client.company }}</p>
+        </div>
+        <div class="page-actions">
+            <a class="button button--secondary" href="{{ path('app_invoice_edit', {id: invoice.id}) }}">Edit</a>
+            <form method="post" action="{{ path('app_invoice_delete', {id: invoice.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_invoice_' ~ invoice.id) }}">
+                <button class="button button--danger" type="submit">Delete</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="grid grid--2">
+        <article class="panel detail-list">
+            <div><span>Status</span><strong><span class="pill pill--{{ invoice.status }}">{{ invoice.status|title }}</span></strong></div>
+            <div><span>Amount</span><strong>EUR {{ invoice.amount }}</strong></div>
+            <div><span>Issued</span><strong>{{ invoice.issuedAt|date('Y-m-d') }}</strong></div>
+            <div><span>Due</span><strong>{{ invoice.dueAt|date('Y-m-d') }}</strong></div>
+            <div><span>Client</span><strong>{{ invoice.client.company }} - {{ invoice.client.name }}</strong></div>
+            <div><span>Description</span><strong>{{ invoice.description ?: 'No description provided.' }}</strong></div>
+        </article>
+    </section>
+{% endblock %}

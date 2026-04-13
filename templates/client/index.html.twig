@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Clients</p>
+            <h1>Your client directory</h1>
+        </div>
+        <a class="button" href="{{ path('app_client_new') }}">Add client</a>
+    </section>
+
+    <section class="panel">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td>{{ client.company }}</td>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.email }}</td>
+                            <td><a href="{{ path('app_client_show', {id: client.id}) }}">View</a></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="muted">No clients created yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
