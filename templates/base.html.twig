@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     </head>
     <body>
-        <div class="shell">
+        <div class="shell {{ app.user ? '' : 'shell--auth' }}">
             {% if app.user %}
                 <aside class="sidebar">
                     <a class="brand" href="{{ path('app_dashboard') }}">InvoiceFlow</a>
